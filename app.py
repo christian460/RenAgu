@@ -175,12 +175,27 @@ st.markdown("""
 
 if st.session_state["pagina"] is None:
 
-    st.markdown("""
-    ## Bienvenido a Renovación Agustina
+    col1, col2 = st.columns([1,2])
 
-    Seleccione una candidatura en la barra superior
-    para conocer a nuestros candidatos.
-    """)
+    with col1:
+        st.image(
+            "assets/candidatos.jpeg",
+            use_container_width=True
+        )
+
+    with col2:
+        st.markdown("""
+        <div class="perfil">
+        <h2>Candidatos</h2>
+
+        - Dr. Fernando Carlos Mejía Nova - Candidato a Rector
+        - Dr. Ubaldo Enríquez Aguirre - Candidato a Vicerrector Académico
+        - Dr. José Luis Picoaga Chávez - Candidato a Vicerrector de Investigación
+
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.subheader("Imágenes de campaña")
 
 elif st.session_state["pagina"] == "rector":
 

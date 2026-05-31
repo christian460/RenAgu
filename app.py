@@ -13,6 +13,9 @@ st.set_page_config(
     layout="wide"
 )
 
+if "pagina" not in st.session_state:
+    st.session_state["pagina"] = None
+
 st.markdown(f"""
 <style>
 
@@ -79,8 +82,82 @@ st.markdown(f"""
     font-weight: bold;
 }}
 
+.nav-button button {{
+    width: 100%;
+    height: 55px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 10px;
+}}
+
+div.stButton > button {{
+    margin-top: 20px;
+    width: 100%;
+    height: 50px;
+
+    border: none;
+    border-bottom: 3px solid transparent;
+
+    border-radius: 8px 8px 0 0;
+
+    background: transparent;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    transition: all 0.2s ease;
+}}
+
+div.stButton > button:hover {{
+    background-color: rgba(128,128,128,0.1);
+}}
+
+div.stButton > button:focus {{
+    border-bottom: 3px solid #1976d2;
+}}
+
 </style>
 """, unsafe_allow_html=True)
+
+nav, logo = st.columns([5,1])
+
+with nav:
+
+    b1, b2, b3 = st.columns(3)
+
+    with b1:
+        if st.button("🎓 Rector", use_container_width=True):
+            st.session_state["pagina"] = "rector"
+
+    with b2:
+        if st.button("📚 Vicerrector Académico", use_container_width=True):
+            st.session_state["pagina"] = "academico"
+
+    with b3:
+        if st.button("🔬 Vicerrector de Investigación", use_container_width=True):
+            st.session_state["pagina"] = "investigacion"
+
+with logo:
+
+    logo_b64 = get_base64("assets/logo.png")
+
+    st.markdown(
+        f"""
+        <div style="text-align:center;">
+            <a href="?inicio=true">
+                <img
+                    src="data:image/png;base64,{logo_b64}"
+                    style="
+                        padding:10px;
+                        width:90px;
+                        cursor:pointer;
+                    "
+                />
+            </a>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 st.markdown("""
 <div class="hero">
@@ -90,13 +167,17 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-tab1, tab2, tab3 = st.tabs([
-    "🎓 Rector",
-    "📚 Vicerrector Académico",
-    "🔬 Vicerrector de Investigación"
-])
 
-with tab1:
+if st.session_state.pagina is None:
+
+    st.markdown("""
+    ## Bienvenido a Renovación Agustina
+
+    Seleccione una candidatura en la barra superior
+    para conocer a nuestros candidatos.
+    """)
+
+elif st.session_state.pagina == "rector":
 
     col1, col2 = st.columns([1,2])
 
@@ -109,7 +190,7 @@ with tab1:
     with col2:
         st.markdown("""
         <div class="perfil">
-        <h2>Dr. Fernado Carlos Mejía Nova</h2>
+        <h2>Dr. Fernando Carlos Mejía Nova</h2>
         <h4>Candidato a Rector</h4>
 
         Profesional con amplia experiencia en gestión pública,
@@ -118,11 +199,10 @@ with tab1:
         </div>
         """, unsafe_allow_html=True)
 
+    st.subheader("Imágenes de campaña")
 
-    st.subheader("Imagenes de campaña")
 
-
-with tab2:
+elif st.session_state.pagina == "academico":
 
     col1, col2 = st.columns([1,2])
 
@@ -144,11 +224,10 @@ with tab2:
         </div>
         """, unsafe_allow_html=True)
 
+    st.subheader("Imágenes de campaña")
 
-    st.subheader("Imagenes de campaña")
 
-
-with tab3:
+elif st.session_state.pagina == "investigacion":
 
     col1, col2 = st.columns([1,2])
 
@@ -170,7 +249,7 @@ with tab3:
         </div>
         """, unsafe_allow_html=True)
 
-    st.subheader("Imagenes de campaña")
+    st.subheader("Imágenes de campaña")
 
 st.markdown("---")
 

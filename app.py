@@ -128,7 +128,7 @@ div.stButton > button[kind="secondary"] {{
 </style>
 """, unsafe_allow_html=True)
 
-nav, logo = st.columns([5,1])
+nav, espacio, logo = st.columns([5, 0.3, 0.7])
 
 with nav:
 
@@ -147,7 +147,7 @@ with nav:
             st.session_state["pagina"] = "investigacion"
 
 with logo:
-
+    
     img = Image.open("assets/logo.png")
     img = img.resize((80, 80))
 
@@ -194,6 +194,8 @@ if st.session_state["pagina"] is None:
 
         </div>
         """, unsafe_allow_html=True)
+        
+    st.markdown("---")
 
     st.subheader("Imágenes de campaña")
 
@@ -219,7 +221,13 @@ elif st.session_state["pagina"] == "rector":
         </div>
         """, unsafe_allow_html=True)
 
+    st.markdown("---")
+
     st.subheader("Imágenes de campaña")
+    
+    st.markdown("---")
+    
+    st.subheader("Mensaje del candidato")
 
 
 elif st.session_state["pagina"] == "academico":
@@ -244,7 +252,13 @@ elif st.session_state["pagina"] == "academico":
         </div>
         """, unsafe_allow_html=True)
 
+    st.markdown("---")
+
     st.subheader("Imágenes de campaña")
+
+    st.markdown("---")
+
+    st.subheader("Mensaje del candidato")
 
 
 elif st.session_state["pagina"] == "investigacion":
@@ -269,7 +283,14 @@ elif st.session_state["pagina"] == "investigacion":
         </div>
         """, unsafe_allow_html=True)
 
+    st.markdown("---")
+
     st.subheader("Imágenes de campaña")
+
+    st.markdown("---")
+
+    st.subheader("Mensaje del candidato")
+
 
 st.markdown("---")
 

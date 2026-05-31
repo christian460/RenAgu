@@ -179,7 +179,7 @@ if st.session_state["pagina"] is None:
 
     with col1:
         st.image(
-            "assets/candidatos.jpeg",
+            "assets/Candidatos.jpeg",
             use_container_width=True
         )
 

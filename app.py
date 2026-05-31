@@ -1,4 +1,11 @@
 import streamlit as st
+import base64
+
+def get_base64(imagen):
+    with open(imagen, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
+banner = get_base64("assets/Banner.png")
 
 st.set_page_config(
     page_title="Partido Político",
@@ -6,43 +13,71 @@ st.set_page_config(
     layout="wide"
 )
 
-st.markdown("""
+st.markdown(f"""
 <style>
 
-.main {
+.main {{
     background-color: #f5f7fa;
-}
+}}
 
-.hero {
-    background: linear-gradient(135deg,#0d47a1,#1976d2);
-    padding: 40px;
+.hero {{
+    background-image:
+        linear-gradient(
+            rgba(0,0,0,0.45),
+            rgba(0,0,0,0.45)
+        ),
+        url("data:image/png;base64,{banner}");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    padding: 120px 40px;
     border-radius: 15px;
     color: white;
     text-align: center;
     margin-bottom: 20px;
-}
+}}
 
-.propuesta {
+[data-theme="light"] .propuesta {{
     background: white;
+    color: black;
+}}
+
+[data-theme="dark"] .propuesta {{
+    background: #262730;
+    color: white;
+}}
+
+.propuesta {{
     padding: 15px;
     border-radius: 10px;
     margin-bottom: 10px;
     border-left: 5px solid #1976d2;
     box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
-}
+}}
 
-.perfil {
+[data-theme="light"] .perfil {{
     background: white;
+    color: black;
+}}
+
+[data-theme="dark"] .perfil {{
+    background: #262730;
+    color: white;
+}}
+
+.perfil {{
     padding: 25px;
     border-radius: 15px;
     box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
-}
+}}
 
-.redes a {
+.redes a {{
     text-decoration: none;
     margin-right: 15px;
     font-weight: bold;
-}
+}}
 
 </style>
 """, unsafe_allow_html=True)
@@ -50,8 +85,8 @@ st.markdown("""
 st.markdown("""
 <div class="hero">
 <h1>RENOVACIÓN AGUSTINA</h1>
-<h3>Compromiso • Transparencia • Calidad</h3>
-<p>Conoce a nuestros candidatos y propuestas para transformar nuestra universidad.</p>
+<h3>Compromiso • Transparencia • Integridad</h3>
+<p>Comprometidos con una universidad democrática, humana y de calidad.</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -67,7 +102,7 @@ with tab1:
 
     with col1:
         st.image(
-            "assets/candidato1.jpg",
+            "assets/Rector.png",
             use_container_width=True
         )
 
@@ -111,7 +146,7 @@ with tab2:
 
     with col1:
         st.image(
-            "assets/candidato2.jpg",
+            "assets/Vicerrector_academico.png",
             use_container_width=True
         )
 
@@ -155,7 +190,7 @@ with tab3:
 
     with col1:
         st.image(
-            "assets/candidato3.jpg",
+            "assets/VicerrectorDeInvestigacion.png",
             use_container_width=True
         )
 

@@ -91,9 +91,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 tab1, tab2, tab3 = st.tabs([
-    "🏛️ Rector",
-    "🤝 Vicerrector Académico",
-    "🌎 Vicerrector de Investigación"
+    "🎓 Rector",
+    "📚 Vicerrector Académico",
+    "🔬 Vicerrector de Investigación"
 ])
 
 with tab1:
@@ -118,27 +118,9 @@ with tab1:
         </div>
         """, unsafe_allow_html=True)
 
-    st.subheader("Principales Propuestas")
 
-    propuestas = [
-        "Mejoramiento integral de vías urbanas.",
-        "Mayor seguridad ciudadana.",
-        "Impulso al empleo juvenil.",
-        "Modernización de servicios municipales.",
-        "Recuperación de espacios públicos."
-    ]
+    st.subheader("Imagenes de campaña")
 
-    for p in propuestas:
-        st.markdown(
-            f'<div class="propuesta">✅ {p}</div>',
-            unsafe_allow_html=True
-        )
-
-    st.subheader("Mensaje del candidato")
-
-    st.video(
-        "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-    )
 
 with tab2:
 
@@ -162,27 +144,9 @@ with tab2:
         </div>
         """, unsafe_allow_html=True)
 
-    st.subheader("Principales Propuestas")
 
-    propuestas = [
-        "Fiscalización eficiente.",
-        "Programas para mujeres emprendedoras.",
-        "Impulso a actividades culturales.",
-        "Mayor transparencia municipal.",
-        "Promoción del deporte."
-    ]
+    st.subheader("Imagenes de campaña")
 
-    for p in propuestas:
-        st.markdown(
-            f'<div class="propuesta">✅ {p}</div>',
-            unsafe_allow_html=True
-        )
-
-    st.subheader("Mensaje de la candidata")
-
-    st.video(
-        "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-    )
 
 with tab3:
 
@@ -206,42 +170,7 @@ with tab3:
         </div>
         """, unsafe_allow_html=True)
 
-    st.subheader("Principales Propuestas")
-
-    propuestas = [
-        "Impulso al turismo regional.",
-        "Mejora de infraestructura vial.",
-        "Fortalecimiento de la educación.",
-        "Proyectos de agua y saneamiento.",
-        "Promoción de inversiones."
-    ]
-
-    for p in propuestas:
-        st.markdown(
-            f'<div class="propuesta">✅ {p}</div>',
-            unsafe_allow_html=True
-        )
-
-    st.subheader("Mensaje del candidato")
-
-    st.video(
-        "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-    )
-
-st.divider()
-
-st.header("📞 Contacto del Partido")
-
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    st.info("📧 contacto@partido.com")
-
-with col2:
-    st.info("📱 +51 999 999 999")
-
-with col3:
-    st.info("📍 Dirección de campaña")
+    st.subheader("Imagenes de campaña")
 
 st.markdown("---")
 

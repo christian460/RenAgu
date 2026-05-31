@@ -1,5 +1,7 @@
 import streamlit as st
 import base64
+from streamlit_image_coordinates import streamlit_image_coordinates
+from PIL import Image   
 
 def get_base64(imagen):
     with open(imagen, "rb") as f:
@@ -15,6 +17,9 @@ st.set_page_config(
 
 if "pagina" not in st.session_state:
     st.session_state["pagina"] = None
+
+if "logo_click" not in st.session_state:
+    st.session_state["logo_click"] = None
 
 st.markdown(f"""
 <style>
@@ -116,6 +121,10 @@ div.stButton > button:focus {{
     border-bottom: 3px solid #1976d2;
 }}
 
+div.stButton > button[kind="secondary"] {{
+    border-radius: 10px;
+}}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -139,25 +148,21 @@ with nav:
 
 with logo:
 
-    logo_b64 = get_base64("assets/logo.png")
+    img = Image.open("assets/logo.png")
+    img = img.resize((80, 80))
 
-    st.markdown(
-        f"""
-        <div style="text-align:center;">
-            <a href="?inicio=true">
-                <img
-                    src="data:image/png;base64,{logo_b64}"
-                    style="
-                        padding:10px;
-                        width:90px;
-                        cursor:pointer;
-                    "
-                />
-            </a>
-        </div>
-        """,
-        unsafe_allow_html=True
+    click = streamlit_image_coordinates(
+        img,
+        key="logo_inicio"
     )
+
+    if (
+        click is not None
+        and click != st.session_state["logo_click"]
+    ):
+        st.session_state["logo_click"] = click
+        st.session_state["pagina"] = None
+        st.rerun()
 
 st.markdown("""
 <div class="hero">
@@ -168,7 +173,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-if st.session_state.pagina is None:
+if st.session_state["pagina"] is None:
 
     st.markdown("""
     ## Bienvenido a Renovación Agustina
@@ -177,7 +182,7 @@ if st.session_state.pagina is None:
     para conocer a nuestros candidatos.
     """)
 
-elif st.session_state.pagina == "rector":
+elif st.session_state["pagina"] == "rector":
 
     col1, col2 = st.columns([1,2])
 
@@ -202,7 +207,7 @@ elif st.session_state.pagina == "rector":
     st.subheader("Imágenes de campaña")
 
 
-elif st.session_state.pagina == "academico":
+elif st.session_state["pagina"] == "academico":
 
     col1, col2 = st.columns([1,2])
 
@@ -227,7 +232,7 @@ elif st.session_state.pagina == "academico":
     st.subheader("Imágenes de campaña")
 
 
-elif st.session_state.pagina == "investigacion":
+elif st.session_state["pagina"] == "investigacion":
 
     col1, col2 = st.columns([1,2])
 

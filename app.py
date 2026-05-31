@@ -109,8 +109,8 @@ with tab1:
     with col2:
         st.markdown("""
         <div class="perfil">
-        <h2>Juan Pérez</h2>
-        <h4>Candidato a Alcalde</h4>
+        <h2>Dr. Fernado Carlos Mejía Nova</h2>
+        <h4>Candidato a Rector</h4>
 
         Profesional con amplia experiencia en gestión pública,
         liderazgo comunitario y desarrollo urbano.
@@ -153,10 +153,10 @@ with tab2:
     with col2:
         st.markdown("""
         <div class="perfil">
-        <h2>María Torres</h2>
-        <h4>Candidata a Regidora</h4>
+        <h2>Dr. Ubaldo Enríquez Aguirre</h2>
+        <h4>Candidato a Vicerrector Académico</h4>
 
-        Defensora de la participación ciudadana,
+        Defensor de la participación ciudadana,
         la transparencia y el desarrollo social.
 
         </div>
@@ -197,8 +197,8 @@ with tab3:
     with col2:
         st.markdown("""
         <div class="perfil">
-        <h2>Carlos Ramos</h2>
-        <h4>Candidato a Consejero Regional</h4>
+        <h2>Dr. José Luis Picoaga Chávez</h2>
+        <h4>Candidato a Vicerrector de Investigación</h4>
 
         Especialista en planificación regional,
         infraestructura y desarrollo económico.

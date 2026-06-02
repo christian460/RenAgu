@@ -199,13 +199,16 @@ if st.session_state["pagina"] is None:
 
     st.subheader("Imágenes de campaña")
 
+    st.markdown("---")
+
+
 elif st.session_state["pagina"] == "rector":
 
     col1, col2 = st.columns([1,2])
 
     with col1:
         st.image(
-            "assets/Rector.png",
+            "assets/Rector.jpg",
             use_container_width=True
         )
 
@@ -229,6 +232,8 @@ elif st.session_state["pagina"] == "rector":
     
     st.subheader("Mensaje del candidato")
 
+    st.markdown("---")
+
 
 elif st.session_state["pagina"] == "academico":
 
@@ -236,7 +241,7 @@ elif st.session_state["pagina"] == "academico":
 
     with col1:
         st.image(
-            "assets/Vicerrector_academico.png",
+            "assets/Vicerrector_Academico.jpeg",
             use_container_width=True
         )
 
@@ -260,6 +265,8 @@ elif st.session_state["pagina"] == "academico":
 
     st.subheader("Mensaje del candidato")
 
+    st.markdown("---")
+
 
 elif st.session_state["pagina"] == "investigacion":
 
@@ -267,7 +274,7 @@ elif st.session_state["pagina"] == "investigacion":
 
     with col1:
         st.image(
-            "assets/VicerrectorDeInvestigacion.png",
+            "assets/Vicerrector_De_Investigacion.jpeg",
             use_container_width=True
         )
 
@@ -291,9 +298,8 @@ elif st.session_state["pagina"] == "investigacion":
 
     st.subheader("Mensaje del candidato")
 
+    st.markdown("---")
 
-st.markdown("---")
 
-st.caption(
-    "Publicidad política. Verifique y contraste la información antes de tomar decisiones electorales."
-)
+
+

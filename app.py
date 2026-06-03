@@ -76,7 +76,7 @@ st.markdown(f"""
 }}
 
 .perfil {{
-    padding: 25px;
+    padding: 5px;
     border-radius: 15px;
     box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
 }}
@@ -180,7 +180,7 @@ if st.session_state["pagina"] is None:
     with col1:
         st.image(
             "assets/Candidatos.jpeg",
-            use_container_width=True
+            width=350
         )
 
     with col2:
@@ -204,25 +204,73 @@ if st.session_state["pagina"] is None:
 
 elif st.session_state["pagina"] == "rector":
 
-    col1, col2 = st.columns([1,2])
+    col1, col2 = st.columns([1, 2])
 
     with col1:
+
         st.image(
             "assets/Rector.jpg",
-            use_container_width=True
+            width=330
         )
 
     with col2:
         st.markdown("""
         <div class="perfil">
-        <h2>Dr. Fernando Carlos Mejía Nova</h2>
-        <h4>Candidato a Rector</h4>
-
-        Profesional con amplia experiencia en gestión pública,
-        liderazgo comunitario y desarrollo urbano.
-
+        <h1>Dr. Fernando Carlos Mejía Nova</h1>
+        <h3>Candidato a Rector</h3>
+        <div style="text-align: justify;">
+        Más de 34 años de experiencia docente universitaria,
+        comprometido con la excelencia académica, la investigación
+        y la modernización institucional de la Universidad Nacional
+        de San Agustín.
+        </div>
         </div>
         """, unsafe_allow_html=True)
+
+        with st.expander("🎓 Formación Académica", expanded=True):
+            st.markdown("""
+            - Doctor en Ciencias: Ingeniería de Producción (UNSA)
+            - Magíster en Ingeniería Industrial, mención Marketing (UNSA)
+            - Ingeniero en Industrias Alimentarias
+            """)
+
+        with st.expander("👨‍🏫 Trayectoria Universitaria"):
+            st.markdown("""
+            - Más de 34 años de experiencia docente universitaria.
+            - Docente en la UNSA desde 1993.
+            - Experiencia en formación profesional, investigación y gestión académica.
+            """)
+
+        with st.expander("🏛️ Gestión Universitaria"):
+            st.markdown("""
+            - Director de la Escuela Profesional de Ingeniería de Industrias Alimentarias (2016–2019).
+            - Responsable del proceso de acreditación de la Escuela.
+            - Director Encargado del Departamento Académico de Industrias Alimentarias (2024–2025).
+            - Impulsor de la modernización e implementación de laboratorios.
+            """)
+
+        with st.expander("🔬 Investigación e Innovación"):
+            st.markdown("""
+            - Publicaciones científicas indexadas en Scopus.
+            - Investigador y gestor de proyectos financiados por UNSA Investiga.
+            - Experiencia en innovación tecnológica y desarrollo agroindustrial.
+            """)
+
+        with st.expander("🤝 Compromiso con la UNSA"):
+            st.markdown("""
+            - Más de tres décadas de servicio institucional.
+            - Participación activa en órganos de gobierno universitario.
+            - Promotor de una universidad moderna, transparente, innovadora e internacionalizada.
+            """)
+
+        with st.expander("🌎 Nuestra Visión"):
+            st.markdown("""
+            <div style="text-align: justify;padding-bottom: 10px;">
+            Una UNSA con excelencia académica, investigación de impacto,
+            transparencia, bienestar universitario e internacionalización
+            al servicio del desarrollo de Arequipa y del Perú.
+            </div>
+            """, unsafe_allow_html=True)
 
     st.markdown("---")
 
@@ -242,7 +290,7 @@ elif st.session_state["pagina"] == "academico":
     with col1:
         st.image(
             "assets/Vicerrector_Academico.jpeg",
-            use_container_width=True
+            width=330
         )
 
     with col2:
@@ -250,12 +298,66 @@ elif st.session_state["pagina"] == "academico":
         <div class="perfil">
         <h2>Dr. Ubaldo Enríquez Aguirre</h2>
         <h4>Candidato a Vicerrector Académico</h4>
-
-        Defensor de la participación ciudadana,
-        la transparencia y el desarrollo social.
-
+        <div style="text-align: justify;">
+        Más de 30 años de trayectoria universitaria en docencia,
+        gestión académica e investigación. Lingüista, abogado,
+        magíster en Educación Superior y doctor en Ciencias Sociales,
+        comprometido con la calidad educativa y el fortalecimiento
+        académico de la Universidad Nacional de San Agustín.
+        </div>
         </div>
         """, unsafe_allow_html=True)
+
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        with st.expander("🎓 Formación Académica", expanded=True):
+            st.markdown("""
+            - Doctor en Ciencias Sociales (UNSA).
+            - Magíster en Educación Superior (UCSM).
+            - Licenciado en Literatura y Lingüística (UNSA).
+            - Abogado por la Universidad Andina Néstor Cáceres Velásquez.
+            """)
+
+        with st.expander("👨‍🏫 Trayectoria Universitaria"):
+            st.markdown("""
+            - Más de 30 años de experiencia docente universitaria.
+            - Docente Principal de la UNSA.
+            - Ex docente de la Universidad Nacional del Altiplano.
+            - Experiencia en pregrado y posgrado.
+            """)
+
+        with st.expander("🏛️ Gestión Académica"):
+            st.markdown("""
+            - Director del Departamento Académico de Literatura y Lingüística.
+            - Ex Director de la Escuela Profesional de Literatura y Lingüística.
+            - Ex Director de la Unidad de Posgrado de la Facultad de Filosofía y Humanidades.
+            - Miembro del Tribunal de Honor Universitario.
+            """)
+
+        with st.expander("📚 Investigación y Producción Intelectual"):
+            st.markdown("""
+            - Autor de libros sobre comunicación, redacción y derecho.
+            - Ganador de concursos de publicación académica de UNSA Investiga.
+            - Asesor de tesis de maestría y segunda especialidad.
+            - Ponente en congresos y seminarios nacionales e internacionales.
+            """)
+
+        with st.expander("🏆 Reconocimientos"):
+            st.markdown("""
+            - Distinciones por investigación y producción académica.
+            - Reconocimientos como ponente y organizador de eventos científicos.
+            - Participación destacada en proyectos educativos y de formación docente.
+            """)
+
+        with st.expander("🌎 Nuestra Visión"):
+            st.markdown("""
+            <div style="text-align: justify;padding-bottom: 10px;">
+            Impulsar una formación académica de excelencia,
+            fortaleciendo la investigación, la innovación,
+            la internacionalización y el desarrollo integral
+            de los estudiantes de la Universidad Nacional de San Agustín.
+            </div>
+            """, unsafe_allow_html=True)
 
     st.markdown("---")
 
@@ -275,7 +377,7 @@ elif st.session_state["pagina"] == "investigacion":
     with col1:
         st.image(
             "assets/Vicerrector_De_Investigacion.jpeg",
-            use_container_width=True
+            width=330
         )
 
     with col2:
@@ -283,12 +385,73 @@ elif st.session_state["pagina"] == "investigacion":
         <div class="perfil">
         <h2>Dr. José Luis Picoaga Chávez</h2>
         <h4>Candidato a Vicerrector de Investigación</h4>
-
-        Especialista en planificación regional,
-        infraestructura y desarrollo económico.
-
+        <div style="text-align: justify;">
+        Médico oncólogo con una destacada trayectoria en docencia,
+        investigación, gestión universitaria y desarrollo de servicios
+        especializados de salud. Reconocido por su liderazgo académico
+        y su aporte al fortalecimiento de la investigación científica
+        y médica en el sur del país.
+        </div>
         </div>
         """, unsafe_allow_html=True)
+
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        with st.expander("🎓 Formación Académica", expanded=True):
+            st.markdown("""
+            - Doctor en Ciencias: Medicina (Suma Cum Laude).
+            - Magíster en Ciencias: Medicina (Suma Cum Laude).
+            - Especialista en Oncología Médica.
+            - Formación especializada en el Hospital de Oncología de México.
+            """)
+
+        with st.expander("👨‍🏫 Trayectoria Académica"):
+            st.markdown("""
+            - Formado en el Colegio San Francisco de Asís durante 11 años.
+            - Docente de la misma institución durante 11 años.
+            - Amplia experiencia en formación universitaria y médica.
+            - Compromiso permanente con la excelencia académica.
+            """)
+
+        with st.expander("🏛️ Gestión Universitaria y Liderazgo"):
+            st.markdown("""
+            - Jefe del Departamento Académico de Medicina en tres periodos consecutivos.
+            - Primer Gerente y fundador del Instituto Regional de Enfermedades Neoplásicas del Sur (IREN Sur).
+            - Impulsor del fortalecimiento institucional y de la investigación médica.
+            """)
+
+        with st.expander("🔬 Investigación e Innovación"):
+            st.markdown("""
+            - Autor de más de 150 trabajos científicos presentados en eventos académicos.
+            - Expositor, organizador y participante en más de 200 congresos y encuentros científicos nacionales e internacionales.
+            - Promotor de la investigación científica aplicada a la salud y al desarrollo regional.
+            """)
+
+        with st.expander("🏥 Aporte al Sistema de Salud"):
+            st.markdown("""
+            - Médico fundador del Servicio de Oncología Médica del Hospital Nacional CASE de EsSalud Arequipa.
+            - Consultor Ad Honorem en Oncología del Hospital Honorio Delgado por más de 28 años.
+            - Contribución permanente a la atención especializada y la formación médica.
+            """)
+
+        with st.expander("🏅 Reconocimientos y Distinciones"):
+            st.markdown("""
+            - Académico de Número de la Academia Nacional de Medicina del Perú.
+            - Miembro titular, fundador o directivo de diversas sociedades científicas.
+            - Medalla y Diploma de Honor al Mérito del Colegio Médico del Perú.
+            - Distinción por su labor educativa, científica y asistencial en beneficio de la salud pública.
+            """)
+
+        with st.expander("🌎 Nuestra Visión"):
+            st.markdown("""
+            <div style="text-align: justify;padding-bottom: 10px;">
+            Consolidar una UNSA líder en investigación,
+            innovación y transferencia del conocimiento,
+            fortaleciendo la producción científica, la
+            internacionalización y el impacto de la universidad
+            en el desarrollo de Arequipa y del Perú.
+            </div>
+            """, unsafe_allow_html=True)
 
     st.markdown("---")
 

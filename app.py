@@ -226,6 +226,8 @@ elif st.session_state["pagina"] == "rector":
         </div>
         </div>
         """, unsafe_allow_html=True)
+        
+        st.markdown("<br>", unsafe_allow_html=True)
 
         with st.expander("🎓 Formación Académica", expanded=True):
             st.markdown("""

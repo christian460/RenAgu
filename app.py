@@ -1,7 +1,8 @@
 import streamlit as st
 import base64
 from streamlit_image_coordinates import streamlit_image_coordinates
-from PIL import Image   
+from PIL import Image
+from pathlib import Path
 
 def get_base64(imagen):
     with open(imagen, "rb") as f:
@@ -125,6 +126,23 @@ div.stButton > button[kind="secondary"] {{
     border-radius: 10px;
 }}
 
+.galeria-img {{
+    overflow: hidden;
+    border-radius: 15px;
+    margin-bottom: 15px;
+}}
+
+.galeria-img img {{
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease;
+}}
+
+.galeria-img img:hover {{
+    transform: scale(1.05);
+}}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -197,7 +215,38 @@ if st.session_state["pagina"] is None:
         
     st.markdown("---")
 
-    st.subheader("Imágenes de campaña")
+    st.subheader("Presentacion de Candidatos")
+    carpeta = Path("assets/PresentacionCandidatos")
+
+    imagenes = []
+
+    for extension in ["*.png", "*.jpg", "*.jpeg", "*.webp"]:
+        imagenes.extend(carpeta.glob(extension))
+
+    imagenes = sorted(imagenes)
+
+    columnas = 3
+
+    for i in range(0, len(imagenes), columnas):
+
+        cols = st.columns(columnas)
+
+        for j, col in enumerate(cols):
+
+            indice = i + j
+
+            if indice < len(imagenes):
+                with col:
+
+                    imagen_b64 = get_base64(str(imagenes[indice]))
+                    st.markdown(
+                        f"""
+                        <div class="galeria-img">
+                            <img src="data:image/png;base64,{imagen_b64}">
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
 
     st.markdown("---")
 

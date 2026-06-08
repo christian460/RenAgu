@@ -3,10 +3,303 @@ import base64
 from streamlit_image_coordinates import streamlit_image_coordinates
 from PIL import Image
 from pathlib import Path
+import math
+import streamlit.components.v1 as components
+
 
 def get_base64(imagen):
     with open(imagen, "rb") as f:
         return base64.b64encode(f.read()).decode()
+    
+def imagen_a_base64(path: Path) -> str:
+    path = Path(path)
+    ext = path.suffix.lower().lstrip(".")
+    mime = {"jpg": "jpeg", "jpeg": "jpeg", "png": "png", "webp": "webp"}.get(ext, "png")
+    with open(path, "rb") as f:
+        data = base64.b64encode(f.read()).decode()
+    return f"data:image/{mime};base64,{data}"
+
+def build_grilla(imagenes_path: list[Path]) -> str:
+    imgs_html = ""
+    for img in imagenes_path:
+        src = imagen_a_base64(img)
+        imgs_html += f'<img src="{src}">'
+    return imgs_html
+
+def build_flipbook(grupos: list[list[Path]], encabezados: list[str]) -> str:
+    logo_b64 = imagen_a_base64("assets/logo.png")
+    pages_js = "["
+    for i, grupo in enumerate(grupos):
+        imgs_b64 = [f'"{imagen_a_base64(img)}"' for img in grupo]
+        pages_js += f'{{"label":"{encabezados[i]}","imgs":[{",".join(imgs_b64)}]}},'
+    pages_js += "]"
+
+    return f"""
+    <!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+    <style>
+    <style>
+    *{{margin:0;padding:0;box-sizing:border-box;}}
+    body{{
+        background:transparent;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        padding:16px 0 24px;
+        font-family:Arial,sans-serif;
+    }}
+    .titulo{{
+        font-size:18px;
+        font-weight:bold;
+        color:#1976d2;
+        margin-bottom:4px;
+    }}
+    .indicador{{
+        font-size:13px;
+        color:#888;
+        margin-bottom:14px;
+    }}
+    .scene{{
+        width:1350px;
+        height:900px;
+        perspective:2500px;
+        position:relative;
+    }}
+    .spread{{
+        position:absolute;
+        inset:0;
+        display:flex;
+    }}
+    .left-page{{
+        width:50%;
+        height:100%;
+        background:#fff;
+        border-radius:12px 0 0 12px;
+        border:1px solid #ddd;
+        overflow:hidden;
+        position:relative;
+    }}
+    .right-static{{
+        width:50%;
+        height:100%;
+        background:#f5f5f5;
+        border-radius:0 12px 12px 0;
+        border:1px solid #ddd;
+        border-left:none;
+        overflow:hidden;
+    }}
+    .paper{{
+        position:absolute;
+        right:0;
+        top:0;
+        width:50%;
+        height:100%;
+        transform-origin:left center;
+        transform-style:preserve-3d;
+        transition:transform 1s cubic-bezier(.645,.045,.355,1);
+        z-index:2;
+    }}
+    .front,.back{{
+        position:absolute;
+        inset:0;
+        backface-visibility:hidden;
+        background:#fff;
+        overflow:hidden;
+    }}
+    .front{{
+        border-radius:0 12px 12px 0;
+        border:1px solid #ddd;
+    }}
+    .back{{
+        border-radius:12px 0 0 12px;
+        border:1px solid #ddd;
+        transform:rotateY(180deg);
+    }}
+    .paper.flipped{{
+        transform:rotateY(-180deg);
+    }}
+    .grid{{
+        display:grid;
+        grid-template-columns:repeat(3, 1fr);
+        grid-auto-rows: 1fr;
+        gap:10px;
+        width:100%;
+        height:calc(100% - 30px);
+        padding:14px;
+    }}
+    .grid img{{
+        width:100%;
+        height:100%;
+        object-fit: cover;
+        object-position: center;
+        aspect-ratio: 16 / 10 ;
+        border-radius:8px;
+        display:block;
+    }}
+    .pg-label{{
+        position:absolute;
+        bottom:6px;
+        left:0;
+        right:0;
+        text-align:center;
+        font-size:12px;
+        color:#999;
+    }}
+    .spine{{
+        position:absolute;
+        left:50%;
+        top:0;
+        width:5px;
+        height:100%;
+        background:#ddd;
+        transform:translateX(-50%);
+        z-index:10;
+        border-radius:2px;
+    }}
+    .page-shadow{{
+        position:absolute;
+        inset:0;
+        pointer-events:none;
+        border-radius:0 12px 12px 0;
+        box-shadow:inset -25px 0 50px rgba(0,0,0,.12);
+    }}
+    .controls{{
+        margin-top:16px;
+        display:flex;
+        align-items:center;
+        gap:20px;
+    }}
+    button{{
+        padding:10px 28px;
+        font-size:16px;
+        border:none;
+        border-radius:10px;
+        cursor:pointer;
+        background:#1976d2;
+        color:white;
+        transition:transform .15s;
+    }}
+    button:hover{{
+        transform:scale(1.05);
+    }}
+    button:disabled{{
+        background:#ccc;
+        cursor:default;
+        transform:none;
+    }}  
+    .page-title{{
+        position:absolute;
+        top:8px;
+        left:0;
+        right:0;
+        text-align:center;
+        font-size:16px;
+        font-weight:bold;
+        color:#1976d2;
+    }}
+    </style>
+    </style></head><body>
+
+    <div class="titulo">📖 Imagenes de campaña</div>
+    <div class="indicador" id="ind">Página 1 de {len(grupos)}</div>
+
+    <div class="scene">
+      <div class="spread">
+        <div class="left-page">
+            <div class="page-title" id="left-title"></div>
+            <div class="grid" id="left-grid"></div>
+            <div class="pg-label" id="left-label">
+            </div>
+        </div>
+        <div class="right-static" id="right-static"></div>
+      </div>
+      <div class="spine"></div>
+      <div class="paper" id="paper">
+        <div class="front">
+            <div class="page-title" id="front-title"></div>
+            <div class="grid" id="front-grid"></div>
+            <div class="page-shadow"></div>
+            <div class="pg-label" id="front-label"></div>
+        </div>
+        <div class="back">
+            <div class="page-title" id="back-title"></div>
+            <div class="grid" id="back-grid"></div>
+            <div class="pg-label" id="back-label"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="btnPrev" onclick="prevPage()" disabled>◀ Anterior</button>
+      <button id="btnNext" onclick="nextPage()">Siguiente ▶</button>
+    </div>
+
+    <script>
+    const LOGO = "data:image/png;base64,{logo_b64}";
+    const PAGES = {pages_js};
+    let page = 0, anim = false;
+
+    function grid(el, imgs){{
+      el.innerHTML = imgs.map(s=>`<img src="${{s}}">`).join('');
+    }}
+
+    function setPage(p){{
+        const cur = PAGES[p];
+        const prev = p > 0 ? PAGES[p-1] : null;
+
+        grid(document.getElementById('front-grid'), cur.imgs);
+        document.getElementById('front-label').textContent = cur.label;
+
+        if(prev){{
+            grid(document.getElementById('left-grid'), prev.imgs);
+            document.getElementById('left-label').textContent = prev.label;
+        }} else {{
+            document.getElementById('left-grid').innerHTML =
+                '<img src="${{LOGO}}" style="width:100%;height:100%;object-fit:contain;">';
+
+            document.getElementById('left-label').textContent = '';
+        }}
+
+        document.getElementById('right-static').innerHTML = '';
+        document.getElementById('paper').classList.remove('flipped');
+
+        document.getElementById('ind').textContent =
+            `Página ${{p+1}} de ${{PAGES.length}}`;
+
+        document.getElementById('btnPrev').disabled = p === 0;
+        document.getElementById('btnNext').disabled = p === PAGES.length - 1;
+    }}
+
+    function nextPage(){{
+      if(anim || page>=PAGES.length-1) return;
+      anim=true;
+      const next=PAGES[page+1];
+      grid(document.getElementById('back-grid'), next.imgs);
+      document.getElementById('back-label').textContent=next.label;
+      const rs=document.getElementById('right-static');
+      rs.innerHTML='<div class="grid">'+next.imgs.map(s=>`<img src="${{s}}">`).join('')+'</div>';
+      document.getElementById('paper').classList.add('flipped');
+      setTimeout(()=>{{page++;setPage(page);anim=false;}},1000);
+    }}
+
+    function prevPage(){{
+      if(anim||page<=0) return;
+      anim=true;
+      grid(document.getElementById('back-grid'),PAGES[page].imgs);
+      document.getElementById('back-label').textContent=PAGES[page].label;
+      const p2=document.getElementById('paper');
+      p2.style.transition='none';
+      p2.classList.add('flipped');
+      setTimeout(()=>{{
+        p2.style.transition='transform 1s cubic-bezier(.645,.045,.355,1)';
+        p2.classList.remove('flipped');
+        setTimeout(()=>{{page--;setPage(page);anim=false;}},1000);
+      }},20);
+    }}
+
+    setPage(0);
+    </script>
+    </body></html>
+    """
 
 banner = get_base64("assets/Banner.png")
 
@@ -143,6 +436,90 @@ div.stButton > button[kind="secondary"] {{
     transform: scale(1.05);
 }}
 
+button[kind="secondary"] {{
+    font-size: 22px !important;
+    font-weight: bold !important;
+}}
+
+.flipbook-container {{
+    perspective: 1500px;
+    margin-top: 20px;
+}}
+
+.flipbook-page {{
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+
+    animation: flipIn .6s ease;
+}}
+
+@keyframes flipIn {{
+    from {{
+        opacity: 0;
+        transform:
+            rotateY(-25deg)
+            translateX(60px);
+    }}
+
+    to {{
+        opacity: 1;
+        transform:
+            rotateY(0deg)
+            translateX(0px);
+    }}
+}}
+
+.flip-grid {{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}}
+
+.flip-grid img {{
+    width:100%;
+    border-radius:12px;
+
+    transition:all .3s ease;
+}}
+
+.flip-grid img:hover {{
+    transform:scale(1.05);
+    box-shadow:0 8px 20px rgba(0,0,0,.25);
+}}
+
+.flipbook-img img {{
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}}
+
+.flipbook-titulo {{
+    text-align:center;
+    font-size:32px;
+    font-weight:bold;
+    margin-bottom:10px;
+}}
+
+.flipbook-pagina {{
+    text-align:center;
+    color:#1976d2;
+    font-size:18px;
+    margin-bottom:15px;
+}}
+
+@keyframes slidePage {{
+    from {{
+        opacity:0;
+        transform:translateX(80px);
+    }}
+
+    to {{
+        opacity:1;
+        transform:translateX(0);
+    }}
+}}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -215,38 +592,25 @@ if st.session_state["pagina"] is None:
         
     st.markdown("---")
 
-    st.subheader("Presentacion de Candidatos")
     carpeta = Path("assets/PresentacionCandidatos")
 
     imagenes = []
-
-    for extension in ["*.png", "*.jpg", "*.jpeg", "*.webp"]:
-        imagenes.extend(carpeta.glob(extension))
-
+    for ext in ["*.png", "*.jpg", "*.jpeg", "*.webp"]:
+        imagenes.extend(carpeta.glob(ext))
     imagenes = sorted(imagenes)
 
-    columnas = 3
+    IMGS_POR_PAGINA = 15
 
-    for i in range(0, len(imagenes), columnas):
+    grupos = [
+        imagenes[i : i + IMGS_POR_PAGINA]
+        for i in range(0, len(imagenes), IMGS_POR_PAGINA)
+    ]
 
-        cols = st.columns(columnas)
+    encabezados = [f"Grupo {i + 1}" for i in range(len(grupos))]
 
-        for j, col in enumerate(cols):
-
-            indice = i + j
-
-            if indice < len(imagenes):
-                with col:
-
-                    imagen_b64 = get_base64(str(imagenes[indice]))
-                    st.markdown(
-                        f"""
-                        <div class="galeria-img">
-                            <img src="data:image/png;base64,{imagen_b64}">
-                        </div>
-                        """,
-                        unsafe_allow_html=True
-                    )
+    if grupos:
+        html = build_flipbook(grupos, encabezados)
+        components.html(html, height=1050, scrolling=False)
 
     st.markdown("---")
 

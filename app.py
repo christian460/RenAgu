@@ -27,7 +27,7 @@ def build_grilla(imagenes_path: list[Path]) -> str:
     return imgs_html
 
 def build_flipbook(grupos: list[list[Path]], encabezados: list[str]) -> str:
-    logo_b64 = imagen_a_base64("assets/logo.png")
+    logo_src = imagen_a_base64("assets/logo.png")
     pages_js = "["
     for i, grupo in enumerate(grupos):
         imgs_b64 = [f'"{imagen_a_base64(img)}"' for img in grupo]
@@ -59,29 +59,29 @@ def build_flipbook(grupos: list[list[Path]], encabezados: list[str]) -> str:
         margin-bottom:14px;
     }}
     .scene{{
-        width:1350px;
-        height:900px;
+        width:1300px;
+        height:620px;
         perspective:2500px;
         position:relative;
     }}
-    .spread{{
+    .spread{{   
         position:absolute;
         inset:0;
         display:flex;
     }}
     .left-page{{
+        background:#fff;
         width:50%;
         height:100%;
-        background:#fff;
         border-radius:12px 0 0 12px;
         border:1px solid #ddd;
         overflow:hidden;
         position:relative;
     }}
     .right-static{{
+        background:#fff;
         width:50%;
         height:100%;
-        background:#f5f5f5;
         border-radius:0 12px 12px 0;
         border:1px solid #ddd;
         border-left:none;
@@ -99,10 +99,10 @@ def build_flipbook(grupos: list[list[Path]], encabezados: list[str]) -> str:
         z-index:2;
     }}
     .front,.back{{
+        background:#fff;s
         position:absolute;
         inset:0;
         backface-visibility:hidden;
-        background:#fff;
         overflow:hidden;
     }}
     .front{{
@@ -120,11 +120,12 @@ def build_flipbook(grupos: list[list[Path]], encabezados: list[str]) -> str:
     .grid{{
         display:grid;
         grid-template-columns:repeat(3, 1fr);
-        grid-auto-rows: 1fr;
+        grid-auto-rows: auto;
         gap:10px;
         width:100%;
-        height:calc(100% - 30px);
-        padding:14px;
+        height:auto;
+        padding-top:60px;
+        align-content: start;   
     }}
     .grid img{{
         width:100%;
@@ -195,6 +196,7 @@ def build_flipbook(grupos: list[list[Path]], encabezados: list[str]) -> str:
         font-size:16px;
         font-weight:bold;
         color:#1976d2;
+        padding-top:10px;
     }}
     </style>
     </style></head><body>
@@ -234,7 +236,6 @@ def build_flipbook(grupos: list[list[Path]], encabezados: list[str]) -> str:
     </div>
 
     <script>
-    const LOGO = "data:image/png;base64,{logo_b64}";
     const PAGES = {pages_js};
     let page = 0, anim = false;
 
@@ -247,15 +248,17 @@ def build_flipbook(grupos: list[list[Path]], encabezados: list[str]) -> str:
         const prev = p > 0 ? PAGES[p-1] : null;
 
         grid(document.getElementById('front-grid'), cur.imgs);
+        document.getElementById('front-title').textContent = cur.label;
         document.getElementById('front-label').textContent = cur.label;
 
         if(prev){{
             grid(document.getElementById('left-grid'), prev.imgs);
+            document.getElementById('left-title').textContent = prev.label;
             document.getElementById('left-label').textContent = prev.label;
         }} else {{
             document.getElementById('left-grid').innerHTML =
-                '<img src="${{LOGO}}" style="width:100%;height:100%;object-fit:contain;">';
-
+                `<img src="{logo_src}" style="width:540px;height:540px;padding-left:55px;object-fit:contain;aspect-ratio:auto;grid-column:1/-1;">`;
+            document.getElementById('left-title').textContent = '';
             document.getElementById('left-label').textContent = '';
         }}
 
@@ -589,28 +592,40 @@ if st.session_state["pagina"] is None:
 
         </div>
         """, unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    st.subheader("Video de Presentación")
+    st.video("assets/Videos/video_presentacion.mp4")
         
     st.markdown("---")
 
-    carpeta = Path("assets/PresentacionCandidatos")
-
-    imagenes = []
-    for ext in ["*.png", "*.jpg", "*.jpeg", "*.webp"]:
-        imagenes.extend(carpeta.glob(ext))
-    imagenes = sorted(imagenes)
-
-    IMGS_POR_PAGINA = 15
-
-    grupos = [
-        imagenes[i : i + IMGS_POR_PAGINA]
-        for i in range(0, len(imagenes), IMGS_POR_PAGINA)
+    CATEGORIAS = [
+        {"carpeta": "assets/PresentacionCandidatos", "titulo": "📸 Presentación de Candidatos"},
+        # para agregar más solo añades una línea aquí
     ]
 
-    encabezados = [f"Grupo {i + 1}" for i in range(len(grupos))]
+    IMGS_POR_PAGINA = 12
 
-    if grupos:
+    for cat in CATEGORIAS:
+        carpeta = Path(cat["carpeta"])
+        if not carpeta.exists():
+            continue
+
+        imagenes = []
+        for ext in ["*.png", "*.jpg", "*.jpeg", "*.webp"]:
+            imagenes.extend(carpeta.glob(ext))
+        imagenes = sorted(imagenes)
+
+        if not imagenes:
+            continue
+
+        grupos = [imagenes[i : i + IMGS_POR_PAGINA] for i in range(0, len(imagenes), IMGS_POR_PAGINA)]
+        encabezados = [f"{cat['titulo']} - Pág. {i + 1}" for i in range(len(grupos))]
+
+        st.subheader(cat["titulo"])
         html = build_flipbook(grupos, encabezados)
-        components.html(html, height=1050, scrolling=False)
+        components.html(html, height=800, scrolling=False)
 
     st.markdown("---")
 

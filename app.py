@@ -99,14 +99,18 @@ def build_flipbook(grupos: list[list[Path]], encabezados: list[str]) -> str:
         height:100%;
         transform-origin:left center;
         transform-style:preserve-3d;
-        transition:transform 1s cubic-bezier(.645,.045,.355,1);
+        transition:transform 0.8s ease-in-out;
         z-index:2;
+        will-change:transform;        /* ← agregar */
+        -webkit-backface-visibility:hidden;  /* ← agregar */
     }}
+
     .front,.back{{
-        background:#fff;s
         position:absolute;
         inset:0;
         backface-visibility:hidden;
+        -webkit-backface-visibility:hidden;  /* ← agregar */
+        background: linear-gradient(...);
         overflow:hidden;
     }}
     .front{{
@@ -281,26 +285,32 @@ def build_flipbook(grupos: list[list[Path]], encabezados: list[str]) -> str:
       anim=true;
       const next=PAGES[page+1];
       grid(document.getElementById('back-grid'), next.imgs);
-      document.getElementById('back-label').textContent=next.label;
+      document.getElementById('back-title').textContent = next.label;
       const rs=document.getElementById('right-static');
       rs.innerHTML='<div class="grid">'+next.imgs.map(s=>`<img src="${{s}}">`).join('')+'</div>';
-      document.getElementById('paper').classList.add('flipped');
-      setTimeout(()=>{{page++;setPage(page);anim=false;}},1000);
-    }}
+      
+      requestAnimationFrame(()=>{{                        /* ← cambiar setTimeout por rAF */
+        document.getElementById('paper').classList.add('flipped');
+      }});
+      
+      setTimeout(()=>{{page++;setPage(page);anim=false;}}, 850);  /* ← 850 en lugar de 1000 */
+    }}  
 
-    function prevPage(){{
+     function prevPage(){{
       if(anim||page<=0) return;
       anim=true;
       grid(document.getElementById('back-grid'),PAGES[page].imgs);
-      document.getElementById('back-label').textContent=PAGES[page].label;
+      document.getElementById('back-title').textContent = PAGES[page].label;
       const p2=document.getElementById('paper');
       p2.style.transition='none';
       p2.classList.add('flipped');
-      setTimeout(()=>{{
-        p2.style.transition='transform 1s cubic-bezier(.645,.045,.355,1)';
-        p2.classList.remove('flipped');
-        setTimeout(()=>{{page--;setPage(page);anim=false;}},1000);
-      }},20);
+      requestAnimationFrame(()=>{{            
+        requestAnimationFrame(()=>{{                   
+          p2.style.transition='transform 0.8s ease-in-out';
+          p2.classList.remove('flipped');
+          setTimeout(()=>{{page--;setPage(page);anim=false;}}, 850);
+        }});
+      }});
     }}
 
     setPage(0);

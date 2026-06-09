@@ -46,6 +46,8 @@ def build_flipbook(grupos: list[list[Path]], encabezados: list[str]) -> str:
         align-items:center;
         padding:16px 0 24px;
         font-family:Arial,sans-serif;
+        width:100%;
+        overflow-x:hidden;
     }}
     .titulo{{
         font-size:18px;
@@ -59,8 +61,10 @@ def build_flipbook(grupos: list[list[Path]], encabezados: list[str]) -> str:
         margin-bottom:14px;
     }}
     .scene{{
-        width:1300px;
-        height:620px;
+        width: 90vw;
+        max-width: 1300px;
+        height: 45vw;
+        max-height: 620px;
         perspective:2500px;
         position:relative;
     }}
@@ -132,7 +136,7 @@ def build_flipbook(grupos: list[list[Path]], encabezados: list[str]) -> str:
         height:100%;
         object-fit: cover;
         object-position: center;
-        aspect-ratio: 16 / 10 ;
+        aspect-ratio: 16 / 10;
         border-radius:8px;
         display:block;
     }}
@@ -625,7 +629,7 @@ if st.session_state["pagina"] is None:
 
         st.subheader(cat["titulo"])
         html = build_flipbook(grupos, encabezados)
-        components.html(html, height=800, scrolling=False)
+        components.html(html, height=700, scrolling=False)
 
     st.markdown("---")
 

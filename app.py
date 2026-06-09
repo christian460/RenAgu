@@ -265,7 +265,7 @@ def build_flipbook(grupos: list[list[Path]], encabezados: list[str]) -> str:
             document.getElementById('left-label').textContent = prev.label;
         }} else {{
             document.getElementById('left-grid').innerHTML =
-                `<img src="{logo_src}" style="width:540px;height:540px;padding-left:55px;object-fit:contain;aspect-ratio:auto;grid-column:1/-1;">`;
+                `<img src="{logo_src}" style="width:80%;height:auto;padding-left:55px;object-fit:contain;aspect-ratio:auto;grid-column:1/-1;">`;
             document.getElementById('left-title').textContent = '';
             document.getElementById('left-label').textContent = '';
         }}
@@ -289,11 +289,11 @@ def build_flipbook(grupos: list[list[Path]], encabezados: list[str]) -> str:
       const rs=document.getElementById('right-static');
       rs.innerHTML='<div class="grid">'+next.imgs.map(s=>`<img src="${{s}}">`).join('')+'</div>';
       
-      requestAnimationFrame(()=>{{                        /* ← cambiar setTimeout por rAF */
+      requestAnimationFrame(()=>{{                        
         document.getElementById('paper').classList.add('flipped');
       }});
       
-      setTimeout(()=>{{page++;setPage(page);anim=false;}}, 850);  /* ← 850 en lugar de 1000 */
+      setTimeout(()=>{{page++;setPage(page);anim=false;}}, 850);  
     }}  
 
      function prevPage(){{

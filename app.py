@@ -109,8 +109,8 @@ def build_flipbook(grupos: list[list[Path]], encabezados: list[str]) -> str:
         position:absolute;
         inset:0;
         backface-visibility:hidden;
-        -webkit-backface-visibility:hidden;  /* ← agregar */
-        background: linear-gradient(...);
+        -webkit-backface-visibility:hidden;  
+        background:#fff; 
         overflow:hidden;
     }}
     .front{{
@@ -639,7 +639,7 @@ if st.session_state["pagina"] is None:
 
         st.subheader(cat["titulo"])
         html = build_flipbook(grupos, encabezados)
-        components.html(html, height=700, scrolling=False)
+        components.html(html, height=800, scrolling=False)
 
     st.markdown("---")
 

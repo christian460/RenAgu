@@ -410,6 +410,19 @@ elif st.session_state["pagina"] == "rector":
     st.markdown("---")
 
     st.subheader("Imágenes de campaña")
+
+    html_rector = render_flipbook_desde_carpeta(
+        "assets/PresentacionCandidatos/Rector",
+        "📖 Actividades del Rector",
+        imgs_por_pagina=6
+    )
+
+    if html_rector:
+        components.html(
+            html_rector,
+            height=750,
+            scrolling=False
+        )
     
     st.markdown("---")
     
@@ -591,6 +604,19 @@ elif st.session_state["pagina"] == "investigacion":
     st.markdown("---")
 
     st.subheader("Imágenes de campaña")
+
+    html_rector = render_flipbook_desde_carpeta(
+        "assets/PresentacionCandidatos/ViceRectorInv",
+        "📖 Actividades del Rector",
+        imgs_por_pagina=6
+    )
+
+    if html_rector:
+        components.html(
+            html_rector,
+            height=750,
+            scrolling=False
+        )
 
     st.markdown("---")
 

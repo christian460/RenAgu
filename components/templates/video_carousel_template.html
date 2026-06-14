@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:transparent;
+    font-family:Arial,sans-serif;
+    overflow:hidden;
+}
+
+.video-title{
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
+    color:#1976d2;
+    margin-bottom:15px;
+}
+
+.carousel-container{
+    position:relative;
+    width:100%;
+    min-height:750px;
+    overflow:hidden;
+}
+
+.carousel-track{
+    display:flex;
+    height:100%;
+    transition:transform .6s ease-in-out;
+}
+
+.slide{
+    min-width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.slide video{
+    width:100%;
+    max-width:1280px;
+    aspect-ratio:16/9;
+    border-radius:15px;
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.25);
+}
+
+.arrow{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+
+    width:55px;
+    height:55px;
+
+    border:none;
+    border-radius:50%;
+
+    background:rgba(25,118,210,.85);
+
+    color:white;
+    font-size:26px;
+
+    cursor:pointer;
+
+    z-index:100;
+
+    transition:.2s;
+}
+
+.arrow:hover{
+    transform:
+        translateY(-50%)
+        scale(1.08);
+}
+
+.prev{
+    left:15px;
+}
+
+.next{
+    right:15px;
+}
+
+.indicators{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+
+    margin-top:15px;
+}
+
+.dot{
+    width:12px;
+    height:12px;
+
+    border-radius:50%;
+
+    background:#cfd8dc;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.dot.active{
+    background:#1976d2;
+    transform:scale(1.2);
+}
+
+.counter{
+    text-align:center;
+    color:#777;
+    margin-top:10px;
+    font-size:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+
+<div class="carousel-container">
+
+    <button
+        class="arrow prev"
+        onclick="prevVideo()"
+    >
+        ◀
+    </button>
+
+    <div
+        class="carousel-track"
+        id="track"
+    >
+    </div>
+
+    <button
+        class="arrow next"
+        onclick="nextVideo()"
+    >
+        ▶
+    </button>
+
+</div>
+
+<div
+    class="indicators"
+    id="dots"
+>
+</div>
+
+<div
+    class="counter"
+    id="counter"
+>
+</div>
+
+<script>
+
+const VIDEOS = {{VIDEOS}};
+
+let current = 0;
+
+const track =
+    document.getElementById("track");
+
+const dotsContainer =
+    document.getElementById("dots");
+
+function createCarousel(){
+
+    VIDEOS.forEach((video,index)=>{
+
+        const slide =
+            document.createElement("div");
+
+        slide.className = "slide";
+
+        slide.innerHTML =
+        `
+        <video controls>
+            <source
+                src="${video}"
+            >
+        </video>
+        `;
+
+        track.appendChild(slide);
+
+        const dot =
+            document.createElement("div");
+
+        dot.className = "dot";
+
+        dot.onclick = () =>
+            goTo(index);
+
+        dotsContainer.appendChild(dot);
+    });
+
+    updateUI();
+}
+
+function updateUI(){
+
+    track.style.transform =
+        `translateX(-${current * 100}%)`;
+
+    const dots =
+        document.querySelectorAll(".dot");
+
+    dots.forEach(dot =>
+        dot.classList.remove("active")
+    );
+
+    dots[current]
+        .classList.add("active");
+
+    document.getElementById(
+        "counter"
+    ).innerText =
+        `Video ${current+1} de ${VIDEOS.length}`;
+}
+
+function nextVideo(){
+
+    current++;
+
+    if(current >= VIDEOS.length)
+        current = 0;
+
+    updateUI();
+}
+
+function prevVideo(){
+
+    current--;
+
+    if(current < 0)
+        current = VIDEOS.length - 1;
+
+    updateUI();
+}
+
+function goTo(index){
+
+    current = index;
+
+    updateUI();
+}
+
+createCarousel();
+
+</script>
+
+</body>
+</html>

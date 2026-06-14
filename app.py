@@ -3,320 +3,16 @@ import base64
 from streamlit_image_coordinates import streamlit_image_coordinates
 from PIL import Image
 from pathlib import Path
-import math
 import streamlit.components.v1 as components
+
+from components.flipbook import render_flipbook_desde_carpeta
+from components.video_carousel import render_video_carousel_desde_carpeta
+
 
 
 def get_base64(imagen):
     with open(imagen, "rb") as f:
         return base64.b64encode(f.read()).decode()
-    
-def imagen_a_base64(path: Path) -> str:
-    path = Path(path)
-    ext = path.suffix.lower().lstrip(".")
-    mime = {"jpg": "jpeg", "jpeg": "jpeg", "png": "png", "webp": "webp"}.get(ext, "png")
-    with open(path, "rb") as f:
-        data = base64.b64encode(f.read()).decode()
-    return f"data:image/{mime};base64,{data}"
-
-def build_grilla(imagenes_path: list[Path]) -> str:
-    imgs_html = ""
-    for img in imagenes_path:
-        src = imagen_a_base64(img)
-        imgs_html += f'<img src="{src}">'
-    return imgs_html
-
-def build_flipbook(grupos: list[list[Path]], encabezados: list[str]) -> str:
-    logo_src = imagen_a_base64("assets/logo.png")
-    pages_js = "["
-    for i, grupo in enumerate(grupos):
-        imgs_b64 = [f'"{imagen_a_base64(img)}"' for img in grupo]
-        pages_js += f'{{"label":"{encabezados[i]}","imgs":[{",".join(imgs_b64)}]}},'
-    pages_js += "]"
-
-    return f"""
-    <!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
-    <style>
-    <style>
-    *{{margin:0;padding:0;box-sizing:border-box;}}
-    body{{
-        background:transparent;
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        padding:16px 0 24px;
-        font-family:Arial,sans-serif;
-        width:100%;
-        overflow-x:hidden;
-    }}
-    .titulo{{
-        font-size:18px;
-        font-weight:bold;
-        color:#1976d2;
-        margin-bottom:4px;
-    }}
-    .indicador{{
-        font-size:13px;
-        color:#888;
-        margin-bottom:14px;
-    }}
-    .scene{{
-        width: 90vw;
-        max-width: 1300px;
-        height: 45vw;
-        max-height: 620px;
-        perspective:2500px;
-        position:relative;
-    }}
-    .spread{{   
-        position:absolute;
-        inset:0;
-        display:flex;
-    }}
-    .left-page{{
-        background:#fff;
-        width:50%;
-        height:100%;
-        border-radius:12px 0 0 12px;
-        border:1px solid #ddd;
-        overflow:hidden;
-        position:relative;
-    }}
-    .right-static{{
-        background:#fff;
-        width:50%;
-        height:100%;
-        border-radius:0 12px 12px 0;
-        border:1px solid #ddd;
-        border-left:none;
-        overflow:hidden;
-    }}
-    .paper{{
-        position:absolute;
-        right:0;
-        top:0;
-        width:50%;
-        height:100%;
-        transform-origin:left center;
-        transform-style:preserve-3d;
-        transition:transform 0.8s ease-in-out;
-        z-index:2;
-        will-change:transform;        /* ← agregar */
-        -webkit-backface-visibility:hidden;  /* ← agregar */
-    }}
-
-    .front,.back{{
-        position:absolute;
-        inset:0;
-        backface-visibility:hidden;
-        -webkit-backface-visibility:hidden;  
-        background:#fff; 
-        overflow:hidden;
-    }}
-    .front{{
-        border-radius:0 12px 12px 0;
-        border:1px solid #ddd;
-    }}
-    .back{{
-        border-radius:12px 0 0 12px;
-        border:1px solid #ddd;
-        transform:rotateY(180deg);
-    }}
-    .paper.flipped{{
-        transform:rotateY(-180deg);
-    }}
-    .grid{{
-        display:grid;
-        grid-template-columns:repeat(3, 1fr);
-        grid-auto-rows: auto;
-        gap:10px;
-        width:100%;
-        height:auto;
-        padding-top:60px;
-        align-content: start;   
-    }}
-    .grid img{{
-        width:100%;
-        height:100%;
-        object-fit: cover;
-        object-position: center;
-        aspect-ratio: 16 / 10;
-        border-radius:8px;
-        display:block;
-    }}
-    .pg-label{{
-        position:absolute;
-        bottom:6px;
-        left:0;
-        right:0;
-        text-align:center;
-        font-size:12px;
-        color:#999;
-    }}
-    .spine{{
-        position:absolute;
-        left:50%;
-        top:0;
-        width:5px;
-        height:100%;
-        background:#ddd;
-        transform:translateX(-50%);
-        z-index:10;
-        border-radius:2px;
-    }}
-    .page-shadow{{
-        position:absolute;
-        inset:0;
-        pointer-events:none;
-        border-radius:0 12px 12px 0;
-        box-shadow:inset -25px 0 50px rgba(0,0,0,.12);
-    }}
-    .controls{{
-        margin-top:16px;
-        display:flex;
-        align-items:center;
-        gap:20px;
-    }}
-    button{{
-        padding:10px 28px;
-        font-size:16px;
-        border:none;
-        border-radius:10px;
-        cursor:pointer;
-        background:#1976d2;
-        color:white;
-        transition:transform .15s;
-    }}
-    button:hover{{
-        transform:scale(1.05);
-    }}
-    button:disabled{{
-        background:#ccc;
-        cursor:default;
-        transform:none;
-    }}  
-    .page-title{{
-        position:absolute;
-        top:8px;
-        left:0;
-        right:0;
-        text-align:center;
-        font-size:16px;
-        font-weight:bold;
-        color:#1976d2;
-        padding-top:10px;
-    }}
-    </style>
-    </style></head><body>
-
-    <div class="titulo">📖 Imagenes de campaña</div>
-    <div class="indicador" id="ind">Página 1 de {len(grupos)}</div>
-
-    <div class="scene">
-      <div class="spread">
-        <div class="left-page">
-            <div class="page-title" id="left-title"></div>
-            <div class="grid" id="left-grid"></div>
-            <div class="pg-label" id="left-label">
-            </div>
-        </div>
-        <div class="right-static" id="right-static"></div>
-      </div>
-      <div class="spine"></div>
-      <div class="paper" id="paper">
-        <div class="front">
-            <div class="page-title" id="front-title"></div>
-            <div class="grid" id="front-grid"></div>
-            <div class="page-shadow"></div>
-            <div class="pg-label" id="front-label"></div>
-        </div>
-        <div class="back">
-            <div class="page-title" id="back-title"></div>
-            <div class="grid" id="back-grid"></div>
-            <div class="pg-label" id="back-label"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="controls">
-      <button id="btnPrev" onclick="prevPage()" disabled>◀ Anterior</button>
-      <button id="btnNext" onclick="nextPage()">Siguiente ▶</button>
-    </div>
-
-    <script>
-    const PAGES = {pages_js};
-    let page = 0, anim = false;
-
-    function grid(el, imgs){{
-      el.innerHTML = imgs.map(s=>`<img src="${{s}}">`).join('');
-    }}
-
-    function setPage(p){{
-        const cur = PAGES[p];
-        const prev = p > 0 ? PAGES[p-1] : null;
-
-        grid(document.getElementById('front-grid'), cur.imgs);
-        document.getElementById('front-title').textContent = cur.label;
-        document.getElementById('front-label').textContent = cur.label;
-
-        if(prev){{
-            grid(document.getElementById('left-grid'), prev.imgs);
-            document.getElementById('left-title').textContent = prev.label;
-            document.getElementById('left-label').textContent = prev.label;
-        }} else {{
-            document.getElementById('left-grid').innerHTML =
-                `<img src="{logo_src}" style="width:80%;height:auto;padding-left:55px;object-fit:contain;aspect-ratio:auto;grid-column:1/-1;">`;
-            document.getElementById('left-title').textContent = '';
-            document.getElementById('left-label').textContent = '';
-        }}
-
-        document.getElementById('right-static').innerHTML = '';
-        document.getElementById('paper').classList.remove('flipped');
-
-        document.getElementById('ind').textContent =
-            `Página ${{p+1}} de ${{PAGES.length}}`;
-
-        document.getElementById('btnPrev').disabled = p === 0;
-        document.getElementById('btnNext').disabled = p === PAGES.length - 1;
-    }}
-
-    function nextPage(){{
-      if(anim || page>=PAGES.length-1) return;
-      anim=true;
-      const next=PAGES[page+1];
-      grid(document.getElementById('back-grid'), next.imgs);
-      document.getElementById('back-title').textContent = next.label;
-      const rs=document.getElementById('right-static');
-      rs.innerHTML='<div class="grid">'+next.imgs.map(s=>`<img src="${{s}}">`).join('')+'</div>';
-      
-      requestAnimationFrame(()=>{{                        
-        document.getElementById('paper').classList.add('flipped');
-      }});
-      
-      setTimeout(()=>{{page++;setPage(page);anim=false;}}, 850);  
-    }}  
-
-     function prevPage(){{
-      if(anim||page<=0) return;
-      anim=true;
-      grid(document.getElementById('back-grid'),PAGES[page].imgs);
-      document.getElementById('back-title').textContent = PAGES[page].label;
-      const p2=document.getElementById('paper');
-      p2.style.transition='none';
-      p2.classList.add('flipped');
-      requestAnimationFrame(()=>{{            
-        requestAnimationFrame(()=>{{                   
-          p2.style.transition='transform 0.8s ease-in-out';
-          p2.classList.remove('flipped');
-          setTimeout(()=>{{page--;setPage(page);anim=false;}}, 850);
-        }});
-      }});
-    }}
-
-    setPage(0);
-    </script>
-    </body></html>
-    """
 
 banner = get_base64("assets/Banner.png")
 
@@ -609,37 +305,32 @@ if st.session_state["pagina"] is None:
 
     st.markdown("---")
 
-    st.subheader("Video de Presentación")
-    st.video("assets/Videos/video_presentacion.mp4")
+    st.subheader("Videos de Presentación")
+    html_video = render_video_carousel_desde_carpeta(
+        "assets/Videos",
+        "🎥 Videos de Campaña"
+    )
+
+    if html_video:
+        components.html(
+        html_video,
+        height=850,
+        scrolling=False
+    )
         
     st.markdown("---")
 
+    st.subheader("📷 Álbumes de Campaña")
     CATEGORIAS = [
         {"carpeta": "assets/PresentacionCandidatos", "titulo": "📸 Presentación de Candidatos"},
-        # para agregar más solo añades una línea aquí
+        # Para agregar más flipbooks, solo añade una línea aquí:
+        # {"carpeta": "assets/OtraCarpeta", "titulo": "🖼️ Otro título"},
     ]
 
-    IMGS_POR_PAGINA = 12
-
     for cat in CATEGORIAS:
-        carpeta = Path(cat["carpeta"])
-        if not carpeta.exists():
-            continue
-
-        imagenes = []
-        for ext in ["*.png", "*.jpg", "*.jpeg", "*.webp"]:
-            imagenes.extend(carpeta.glob(ext))
-        imagenes = sorted(imagenes)
-
-        if not imagenes:
-            continue
-
-        grupos = [imagenes[i : i + IMGS_POR_PAGINA] for i in range(0, len(imagenes), IMGS_POR_PAGINA)]
-        encabezados = [f"{cat['titulo']} - Pág. {i + 1}" for i in range(len(grupos))]
-
-        st.subheader(cat["titulo"])
-        html = build_flipbook(grupos, encabezados)
-        components.html(html, height=800, scrolling=False)
+        html = render_flipbook_desde_carpeta(cat["carpeta"], cat["titulo"])
+        if html:
+            components.html(html, height=800, scrolling=False)
 
     st.markdown("---")
 
@@ -906,7 +597,3 @@ elif st.session_state["pagina"] == "investigacion":
     st.subheader("Mensaje del candidato")
 
     st.markdown("---")
-
-
-
-

@@ -139,10 +139,15 @@ body{
         ◀
     </button>
 
-    <div
-        class="carousel-track"
-        id="track"
-    >
+    <div class="slide">
+
+        <video
+            id="videoPlayer"
+            controls
+            preload="metadata"
+        >
+        </video>
+
     </div>
 
     <button
@@ -180,23 +185,10 @@ const dotsContainer =
 
 function createCarousel(){
 
+    const dotsContainer =
+        document.getElementById("dots");
+
     VIDEOS.forEach((video,index)=>{
-
-        const slide =
-            document.createElement("div");
-
-        slide.className = "slide";
-
-        slide.innerHTML =
-        `
-        <video controls>
-            <source
-                src="${video}"
-            >
-        </video>
-        `;
-
-        track.appendChild(slide);
 
         const dot =
             document.createElement("div");
@@ -214,8 +206,16 @@ function createCarousel(){
 
 function updateUI(){
 
-    track.style.transform =
-        `translateX(-${current * 100}%)`;
+    const player =
+        document.getElementById(
+            "videoPlayer"
+        );
+
+    player.pause();
+
+    player.src = VIDEOS[current];
+
+    player.load();
 
     const dots =
         document.querySelectorAll(".dot");
@@ -230,7 +230,7 @@ function updateUI(){
     document.getElementById(
         "counter"
     ).innerText =
-        `Video ${current+1} de ${VIDEOS.length}`;
+        `Video ${current + 1} de ${VIDEOS.length}`;
 }
 
 function nextVideo(){

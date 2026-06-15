@@ -420,7 +420,7 @@ elif st.session_state["pagina"] == "rector":
     if html_rector:
         components.html(
             html_rector,
-            height=750,
+            height=700,
             scrolling=False
         )
     
@@ -614,7 +614,7 @@ elif st.session_state["pagina"] == "investigacion":
     if html_rector:
         components.html(
             html_rector,
-            height=750,
+            height=700,
             scrolling=False
         )
 

@@ -330,7 +330,7 @@ if st.session_state["pagina"] is None:
     for cat in CATEGORIAS:
         html = render_flipbook_desde_carpeta(cat["carpeta"], cat["titulo"])
         if html:
-            components.html(html, height=650, scrolling=False)
+            components.html(html, height=700, scrolling=False)
 
     st.markdown("---")
 

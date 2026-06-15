@@ -323,7 +323,7 @@ if st.session_state["pagina"] is None:
     st.subheader("📷 Álbumes de Campaña")
     CATEGORIAS = [
         {"carpeta": "assets/PresentacionCandidatos", "titulo": "📸 Presentación de Candidatos"},
-        # Para agregar más flipbooks, solo añade una línea aquí:
+        {"carpeta": "assets/PresentacionCandidatos/RecorridoUni", "titulo": "📸 Recorrido de los Candidatos por la UNSA"},
         # {"carpeta": "assets/OtraCarpeta", "titulo": "🖼️ Otro título"},
     ]
 
@@ -413,7 +413,7 @@ elif st.session_state["pagina"] == "rector":
 
     html_rector = render_flipbook_desde_carpeta(
         "assets/PresentacionCandidatos/Rector",
-        "📖 Actividades del Rector",
+        "📖 Candidato a Rector",
         imgs_por_pagina=6
     )
 
@@ -607,7 +607,7 @@ elif st.session_state["pagina"] == "investigacion":
 
     html_rector = render_flipbook_desde_carpeta(
         "assets/PresentacionCandidatos/ViceRectorInv",
-        "📖 Actividades del Rector",
+        "📖 Candidato a Vicerrector de Investigación",
         imgs_por_pagina=6
     )
 

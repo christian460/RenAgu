@@ -270,6 +270,12 @@ with logo:
         st.session_state["pagina"] = None
         st.rerun()
 
+
+st.image(
+            "assets/Banner_2.jpeg",
+            use_container_width=True
+        )
+
 st.markdown("""
 <div class="hero">
 <h1>RENOVACIÓN AGUSTINA</h1>

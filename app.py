@@ -7,6 +7,7 @@ import streamlit.components.v1 as components
 
 from components.flipbook import render_flipbook_desde_carpeta
 
+
 def get_base64(imagen):
     with open(imagen, "rb") as f:
         return base64.b64encode(f.read()).decode()
@@ -310,8 +311,8 @@ if st.session_state["pagina"] is None:
     st.subheader("📷 Álbumes de Campaña")
     CATEGORIAS = [
         {"carpeta": "assets/PresentacionCandidatos", "titulo": "📸 Presentación de Candidatos"},
-        {"carpeta": "assets/PresentacionCandidatos/RecorridoUni", "titulo": "📸 Recorrido de los Candidatos por la UNSA"},
-        # {"carpeta": "assets/OtraCarpeta", "titulo": "🖼️ Otro título"},
+        {"carpeta": "assets/PresentacionCandidatos/RecorridoUni_08_06_26", "titulo": "📸 Recorrido de los Candidatos por la UNSA"},
+        {"carpeta": "assets/PresentacionCandidatos/RecorridoUni_17_06_26", "titulo": "📸 Recorrido de los Candidatos por la UNSA - 17/06/26"},
     ]
 
     for cat in CATEGORIAS:

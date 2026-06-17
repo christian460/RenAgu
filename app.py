@@ -6,9 +6,6 @@ from pathlib import Path
 import streamlit.components.v1 as components
 
 from components.flipbook import render_flipbook_desde_carpeta
-from components.video_carousel import render_video_carousel_desde_carpeta
-
-
 
 def get_base64(imagen):
     with open(imagen, "rb") as f:
@@ -305,19 +302,9 @@ if st.session_state["pagina"] is None:
 
     st.markdown("---")
 
-    st.subheader("Videos de Presentación")
-    html_video = render_video_carousel_desde_carpeta(
-        "assets/Videos",
-        "🎥 Videos de Campaña"
-    )
-
-    if html_video:
-        components.html(
-        html_video,
-        height=850,
-        scrolling=False
-    )
-        
+    st.subheader("Video de Presentación")
+    st.video("assets/Videos/2. video_presentacion_candidatos.mp4")
+    
     st.markdown("---")
 
     st.subheader("📷 Álbumes de Campaña")

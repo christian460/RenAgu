@@ -6,6 +6,7 @@ from pathlib import Path
 import streamlit.components.v1 as components
 
 from components.flipbook import render_flipbook_desde_carpeta
+from components.photo_grid import render_photo_grid_desde_carpeta
 
 
 def get_base64(imagen):
@@ -325,6 +326,21 @@ if st.session_state["pagina"] is None:
         html = render_flipbook_desde_carpeta(cat["carpeta"], cat["titulo"])
         if html:
             components.html(html, height=750, scrolling=False)
+
+    st.markdown("---")
+
+    html = render_photo_grid_desde_carpeta(
+        "assets/PresentacionCandidatos/ConferenciaDePrensa",
+        "📸 Conferencia de Prensa"
+    )
+
+    if html:
+
+        components.html(
+            html,
+            height=750,
+            scrolling=False
+        )
 
     st.markdown("---")
 

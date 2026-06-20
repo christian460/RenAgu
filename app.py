@@ -278,10 +278,33 @@ st.image(
         )
 
 st.markdown("""
-<div class="hero">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<div class="hero">     
 <h1>RENOVACIÓN AGUSTINA</h1>
 <h3>Compromiso • Transparencia • Integridad</h3>
 <p>Comprometidos con una universidad democrática, humana y de calidad.</p>
+<a
+href="https://www.facebook.com/share/1E4f9q8F4N/"
+target="_blank"
+style="font-size:40px;color:#1877F2;margin:15px;text-decoration:none;"
+>
+    <i class="fab fa-facebook"></i>
+</a>
+<a
+    href="https://www.instagram.com/reno.vacionagustina/"
+    target="_blank"
+    style="font-size:40px;color:#E4405F;margin:15px;text-decoration:none;"
+>
+    <i class="fab fa-instagram"></i>
+</a>
+<a
+href="https://www.tiktok.com/@renovacionagustina2025"
+target="_blank"
+style="font-size:40px;color:white;margin:15px;text-decoration:none;"
+>
+    <i class="fab fa-tiktok"></i>
+</a>
 </div>
 """, unsafe_allow_html=True)
 

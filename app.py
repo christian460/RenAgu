@@ -239,7 +239,7 @@ nav, espacio, logo = st.columns([5, 0.3, 0.7])
 
 with nav:
 
-    b1, b2, b3, b4 = st.columns(4)
+    b1, b2, b3, b4 ,b5 , b6= st.columns(6)
 
     with b1:
         if st.button("🎓 Rector", use_container_width=True):
@@ -255,6 +255,12 @@ with nav:
     with b4:
         if st.button("📰 RA Informa", use_container_width=True):
             st.session_state["pagina"] = "informa"
+    with b5:
+        if st.button("📝 Propuestas", use_container_width=True):
+            st.session_state["pagina"] = "propuestas"
+    with b6:
+        if st.button("🚨 Compromiso Prioritario", use_container_width=True):
+            st.session_state["pagina"] = "compromiso"
 
 with logo:
     
@@ -667,6 +673,105 @@ elif st.session_state["pagina"] == "investigacion":
     st.markdown("---")
 
 elif st.session_state["pagina"] == "informa":
+
+    st.subheader("Denuncia Desfalco")
+
+    st.image(
+            "assets/RAInforma/Denuncia_Desfalco.jpeg",
+            use_container_width=True
+        )
+
+    st.markdown("---")
+
+elif st.session_state["pagina"] == "propuestas":
+
+    st.subheader("1. GESTIÓN Y BUEN GOBIERNO")
+    st.markdown("""
+        <div class="perfil">
+
+        • Gestión participativa y triestamental <br>
+        • Cero corrupción <br>
+        • Simplificación administrativa <br>
+        • Respeto irrestricto a la Ley Universitaria y al Estatuto <br>
+        • Modernización de los servicios universitarios <br>
+
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    st.subheader("2. TRANSPARENCIA Y RENDICIÓN DE CUENTAS")
+    st.markdown("""
+        <div class="perfil">
+
+        • Portal de transparencia actualizado <br>
+        • Rendición pública de cuentas <br>
+        • Concursos transparentes <br>
+        • Respeto a los derechos de docentes y estudiantes <br>
+        • Corrupción cero dentro de la gestión <br>
+
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    st.subheader("3. INFRAESTRUCTURA Y TRANSFORMACIÓN TECNOLÓGICA")
+    st.markdown("""
+        <div class="perfil">
+
+        • Modernización de aulas y laboratorios <br>
+        • Renovación de equipamiento científico <br>
+        • Digitalización de trámites <br>
+        • Fortalecimiento de la conectividad institucional <br>
+        • Proyección de la futura Ciudad Universitaria <br>
+
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    st.subheader("4. BIENESTAR ESTUDIANTIL Y DESARROLLO HUMANO")
+    st.markdown("""
+        <div class="perfil">
+
+        • Mejoramiento del comedor universitario <br>
+        • Residencia universitaria <br>
+        • Movilidad estudiantil nacional e internacional <br>
+        • Semilleros de investigación <br>
+        • Inclusión y atención a estudiantes con discapacidad <br>
+        • Fortalecimiento de actividades deportivas y culturales <br>
+                
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    col1, col2 = st.columns([2,1])
+
+    with col1:
+       st.subheader("5. DESARROLLO INTEGRAL DOCENTE")
+       st.markdown("""
+        <div class="perfil">
+
+        • Destinar 5% de los RDR para la Linea UNSA <br>
+        • Movilidad académica internacional <br>
+        • Pasantías y estancias de investigación <br>
+        • Incentivos para publicaciones científicas <br>
+        • Apoyo para maestrías y doctorados <br>
+        • Reconocimiento al mérito académico <br>
+                
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col2:
+        st.image(
+            "assets/Mascota.png",
+            width=200
+        )
+
+    st.markdown("---")
+
+elif st.session_state["pagina"] == "compromiso":
 
     st.subheader("Denuncia Desfalco")
 

@@ -672,7 +672,7 @@ elif st.session_state["pagina"] == "informa":
 
     st.image(
             "assets/RAInforma/Denuncia_Desfalco.jpeg",
-            width=950
+            use_container_width=True
         )
 
     st.markdown("---")

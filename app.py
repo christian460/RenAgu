@@ -773,13 +773,23 @@ elif st.session_state["pagina"] == "propuestas":
 
 elif st.session_state["pagina"] == "compromiso":
 
-    st.subheader("Denuncia Desfalco")
+    col1, col2 = st.columns([2,1])
 
-    st.image(
-            "assets/RAInforma/Denuncia_Desfalco.jpeg",
-            use_container_width=True
+    with col1:
+        st.subheader("COMPROMISO PRIORITARIO DE RENOVACIÓN AGUSTINA")
+        st.markdown("1. Recuperar el liderazgo académico de la UNSA")
+        st.markdown("2. Fortalecer la investigación científica y la innovación")
+        st.markdown("3. Defender los derechos de docentes, estudiantes y trabajadores")
+        st.markdown("4. Impulsar la internacionalización universitaria")
+        st.markdown("5. Modernizar la gestión institucional")
+        st.markdown("6. Promover el desarrollo de Arequipa y del sur del Perú")
+
+    with col2:
+        st.image(
+            "assets/Vota5.png",
+            width=450 
         )
-
+    
     st.markdown("---")
 
     

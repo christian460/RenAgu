@@ -239,7 +239,7 @@ nav, espacio, logo = st.columns([5, 0.3, 0.7])
 
 with nav:
 
-    b1, b2, b3 = st.columns(3)
+    b1, b2, b3, b4 = st.columns(4)
 
     with b1:
         if st.button("🎓 Rector", use_container_width=True):
@@ -252,6 +252,9 @@ with nav:
     with b3:
         if st.button("🔬 Vicerrector de Investigación", use_container_width=True):
             st.session_state["pagina"] = "investigacion"
+    with b4:
+        if st.button("📰 RA Informa", use_container_width=True):
+            st.session_state["pagina"] = "informa"
 
 with logo:
     
@@ -662,3 +665,16 @@ elif st.session_state["pagina"] == "investigacion":
     st.subheader("Mensaje del candidato")
 
     st.markdown("---")
+
+elif st.session_state["pagina"] == "informa":
+
+    st.subheader("Denuncia Desfalco")
+
+    st.image(
+            "assets/RAInforma/Denuncia_Desfalco.jpeg",
+            width=950
+        )
+
+    st.markdown("---")
+
+    

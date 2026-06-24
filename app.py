@@ -680,6 +680,14 @@ elif st.session_state["pagina"] == "informa":
             "assets/RAInforma/Denuncia_Desfalco.jpeg",
             use_container_width=True
         )
+    
+    st.subheader("Entrevista en Radio Exitosa")
+    st.markdown("https://www.facebook.com/share/v/14koNE41Rsf/")
+    st.image(
+        "assets/RAInforma/Miniatura.jpeg",
+        use_container_width=True
+    )
+
 
     st.markdown("---")
 
